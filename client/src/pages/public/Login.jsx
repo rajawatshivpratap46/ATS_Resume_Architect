@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  
+  const navigate = useNavigate(); // Initialize navigation hook
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,7 +16,9 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login Data:', formData);
-    // Add authentication logic here
+    
+    // Simulate successful login and redirect to the dashboard
+    navigate('/dashboard'); 
   };
 
   return (
