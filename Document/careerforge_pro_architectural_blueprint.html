@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerForge Pro: Architectural Blueprint & UX Specification</title>
+    <style>
+        /* Modern System UI Font Stack & CSS Variables */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            /* Light Primitive Mappings */
+            --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-200: #bfdbfe; --blue-300: #93c5fd;
+            --blue-400: #60a5fa; --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8;
+            --blue-800: #1e40af; --blue-900: #1e3a8a; --blue-950: #172554;
+
+            --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+            --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569; --slate-700: #334155;
+            --slate-800: #1e293b; --slate-900: #0f172a; --slate-950: #020617;
+
+            --emerald-50: #ecfdf5; --emerald-500: #10b981; --emerald-600: #059669; --emerald-700: #047857;
+            --amber-50: #fffbeb; --amber-500: #f59e0b; --amber-600: #d97706; --amber-700: #b45309;
+            --rose-50: #fff1f2; --rose-500: #f43f5e; --rose-600: #dc2626; --rose-700: #b91c1c;
+
+            /* Interactive UI Semantic Defaults */
+            --bg-canvas: var(--slate-50);
+            --bg-surface: #ffffff;
+            --bg-surface-mute: var(--slate-100);
+            --border-default: var(--slate-200);
+            --text-primary: var(--slate-900);
+            --text-secondary: var(--slate-600);
+            --text-muted: var(--slate-400);
+
+            --brand-primary: var(--blue-900);
+            --brand-action: var(--blue-600);
+            --brand-action-hover: var(--blue-700);
+            --brand-accent: var(--blue-100);
+        }
+
+        /* Basic Layout Resets */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-canvas);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            padding: 50px 60px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            border-radius: 12px;
+            border: 1px solid var(--border-default);
+        }
+
+        h1, h2, h3, h4, h5 {
+            color: var(--slate-900);
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.25rem; /* 36px */
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            color: var(--brand-primary);
+            border-bottom: 4px solid var(--brand-action);
+            padding-bottom: 12px;
+            margin-top: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem; /* 24px */
+            letter-spacing: -0.01em;
+            color: var(--slate-900);
+            border-bottom: 2px solid var(--border-default);
+            padding-bottom: 8px;
+            margin-top: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.125rem; /* 18px */
+            font-weight: 600;
+            color: var(--brand-action);
+            margin-top: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        /* Document Header block */
+        .doc-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .doc-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--brand-action);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .doc-tag {
+            background-color: var(--brand-accent);
+            color: var(--brand-action);
+            padding: 4px 12px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Sitemaps & Trees */
+        .tree-node {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            background-color: var(--bg-surface-mute);
+            border: 1px solid var(--border-default);
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre;
+            color: var(--slate-800);
+            margin-bottom: 20px;
+        }
+
+        /* Tables & Component Specs */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: var(--slate-900);
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            border: 1px solid var(--slate-800);
+        }
+
+        td {
+            padding: 10px 14px;
+            border: 1px solid var(--border-default);
+            color: var(--slate-700);
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bg-surface-mute);
+        }
+
+        /* Swatches and Tokens UI */
+        .token-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .token-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .swatch {
+            height: 48px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .token-meta {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .token-title {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--slate-900);
+        }
+
+        /* Code Block Container */
+        .code-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .code-header {
+            background-color: var(--slate-800);
+            color: var(--slate-300);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 6px 16px;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            border-bottom: 1px solid var(--slate-700);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        pre {
+            background-color: var(--slate-950);
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            padding: 16px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            overflow-x: auto;
+            margin-top: 0;
+            line-height: 1.5;
+        }
+
+        /* Screen Inventory Specifications Wrapper */
+        .screen-container {
+            border: 1px solid var(--border-default);
+            background: var(--bg-surface-mute);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--slate-200);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .screen-id {
+            background: var(--slate-900);
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .screen-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--brand-primary);
+        }
+
+        /* Interactive Wireframes */
+        .wireframe-container {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            background: #18181b;
+            color: #e4e4e7;
+            border: 1px solid #27272a;
+            border-radius: 6px;
+            padding: 16px;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.4;
+        }
+
+        /* Checklist System */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 13.5px;
+        }
+
+        .checklist-checkbox {
+            margin-top: 4px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-default);
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Print Override Rules for Browser Compile engine */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+
+            h1, h2, h3, h4, h5, table, .screen-container, .wireframe-container, pre {
+                page-break-inside: avoid;
+            }
+
+            h1, h2 {
+                page-break-after: avoid;
+            }
+
+            .token-card {
+                border: 1px solid #cbd5e1;
+            }
+
+            .swatch {
+                border: 1px solid #94a3b8 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            pre, .wireframe-container, .tree-node {
+                background: #f8fafc !important;
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- COVER PAGE METADATA -->
+    <div class="doc-header">
+        <span class="doc-tag">SPECIFICATION RELEASE</span>
+        <div class="doc-logo">CAREERFORGE PRO</div>
+        <h1>Architectural Blueprint &amp; UX Specification</h1>
+        <p style="text-align: center; font-size: 15px; margin-top: 10px; font-weight: 500; color: var(--text-secondary);">
+            Figma Design System Architecture &amp; Frontend Implementation Standard
+        </p>
+        <p style="text-align: center; font-size: 13px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
+            Specification Version: 2.1.0-Release | Project: ATS-Proof Resume SaaS Platform
+        </p>
+    </div>
+
+    <!-- SECTION 1 -->
+    <h2>1. Global System Metrics &amp; Design Interpolation</h2>
+    <p>
+        CareerForge Pro uses a secured routing layer managed through React Router DOM and localized session verification middlewares (AuthGuard and RoleGuard). Viewports reflow dynamically using strict design tokens across desktop wide screens, tablet environments, and fluid mobile canvas areas.
+    </p>
+
+    <h3>1.1 Complete Platform Sitemap &amp; Route Enclaves</h3>
+    <div class="tree-node">[Viewport: Root /]
+ ├── (Public Anonymous Zone)
+ │    ├── Landing Page (/)
+ │    ├── Pricing Page (/pricing)
+ │    ├── Authentication Flow
+ │    │    ├── Login (/auth/login)
+ │    │    └── Register (/auth/register)
+ │    ├── Checkout Intermediaries
+ │    │    ├── Checkout Success (/checkout/success)
+ │    │    └── Checkout Cancel (/checkout/cancel)
+ ├── (Authenticated Tenant Session Zone) [AuthGuard Enabled]
+ │    ├── User Main Dashboard (/dashboard)
+ │    ├── User Profile Console (/profile)
+ │    ├── Subscription Portal (/subscription)
+ │    ├── Core Template Gallery (/templates)
+ │    └── Unified Creation Workspace (/workspace/:resumeId)
+ │         ├── View 1: Structural Resume Builder Form
+ │         ├── View 2: Live HTML-to-PDF Preview Canvas
+ │         ├── View 3: Embedded ATS Analyzer Interface
+ │         ├── View 4: AI Contextual Bullet Optimizer Panel
+ │         └── View 5: Asynchronous Cover Letter Generator
+ └── (Elevated Privileges Administration Zone) [RoleGuard: Admin Locked]
+      └── System Admin Dashboard (/admin)
+           ├── Analytics Control Center (/admin/analytics)
+           ├── Tenant Directory Management (/admin/users)
+           ├── Billing & Ledger Audits (/admin/payments)
+           └── Template Asset Configuration (/admin/templates)</div>
+
+    <h3>1.2 Multi-Tier Viewport Breakpoint Standards</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Breakpoint ID</th>
+                <th>Canvas Width</th>
+                <th>Columns</th>
+                <th>Gutter</th>
+                <th>Margin</th>
+                <th>Target Layout Strategy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Desktop Wide</strong></td>
+                <td>1440px</td>
+                <td>12</td>
+                <td>24px</td>
+                <td>80px</td>
+                <td>Multi-pane asymmetric layout structures with scrolling side panel cards</td>
+            </tr>
+            <tr>
+                <td><strong>Tablet Media</strong></td>
+                <td>768px</td>
+                <td>8</td>
+                <td>16px</td>
+                <td>32px</td>
+                <td>Collapsed navigation drawers, icon-only rails, and stacked workspaces</td>
+            </tr>
+            <tr>
+                <td><strong>Mobile Fluid</strong></td>
+                <td>375px</td>
+                <td>4</td>
+                <td>12px</td>
+                <td>16px</td>
+                <td>Single-column vertical stack alignments with localized responsive padding</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SECTION 2 -->
+    <h2>2. Atomic Design Tokens &amp; System Variables</h2>
+    <p>
+        The style system relies on strict parameter variables to synchronize development changes between our Figma designs and client application configurations. The primitive values act as the absolute ground truth.
+    </p>
+
+    <h3>2.1 Primitive Token Palette Modes</h3>
+    <div class="token-group">
+        <div class="token-card">
+            <div class="swatch" style="background-color: #3b82f6;"></div>
+            <div class="token-title">blue-500</div>
+            <div class="token-meta">HEX: #3b82f6</div>
+        </div>
+        <div class="token-card">
+            <div class="swatch" style="background-color: #2563eb;"></div>
+            <div class="token-title">blue-600</div>
+            <div class="token-meta">HEX: #2563eb</div>
+        </div>
+        <div class="token-card">
+            <div class="swatch" style="background-color: #0f172a;"></div>
+            <div class="token-title">slate-900</div>
+            <div class="token-meta">HEX: #0f172a</div>
+        </div>
+        <div class="token-card">
+            <div class="swatch" style="background-color: #10b981;"></div>
+            <div class="token-title">emerald-500</div>
+            <div class="token-meta">HEX: #10b981</div>
+        </div>
+        <div class="token-card">
+            <div class="swatch" style="background-color: #f43f5e;"></div>
+            <div class="token-title">rose-500</div>
+            <div class="token-meta">HEX: #f43f5e</div>
+        </div>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">
+            <span>primitive-tokens.json</span>
+            <span>JSON</span>
+        </div>
+        <pre>{
+  "primitive": {
+    "blue": {
+      "50": "#eff6ff", "100": "#dbeafe", "200": "#bfdbfe", "300": "#93c5fd",
+      "400": "#60a5fa", "500": "#3b82f6", "600": "#2563eb", "700": "#1d4ed8",
+      "800": "#1e40af", "900": "#1e3a8a", "950": "#172554"
+    },
+    "slate": {
+      "50": "#f8fafc", "100": "#f1f5f9", "200": "#e2e8f0", "300": "#cbd5e1",
+      "400": "#94a3b8", "500": "#64748b", "600": "#475569", "700": "#334155",
+      "800": "#1e293b", "900": "#0f172a", "950": "#020617"
+    },
+    "emerald": { "50": "#ecfdf5", "500": "#10b981", "600": "#059669", "700": "#047857" },
+    "amber": { "50": "#fffbeb", "500": "#f59e0b", "600": "#d97706", "700": "#b45309" },
+    "rose": { "50": "#fff1f2", "500": "#f43f5e", "600": "#dc2626", "700": "#b91c1c" }
+  }
+}</pre>
+    </div>
+
+    <h3>2.2 Semantic Token Modes (Figma Light / Dark Mode Configuration)</h3>
+    <div class="code-container">
+        <div class="code-header">
+            <span>semantic-tokens.json</span>
+            <span>JSON</span>
+        </div>
+        <pre>{
+  "semantic": {
+    "color": {
+      "background": {
+        "canvas":       { "light": "{primitive.slate.50}",     "dark": "{primitive.slate.950}" },
+        "surface":      { "light": "#ffffff",                  "dark": "{primitive.slate.900}" },
+        "surface-mute": { "light": "{primitive.slate.100}",    "dark": "{primitive.slate.800}" },
+        "inverse":      { "light": "{primitive.slate.950}",    "dark": "{primitive.slate.50}" }
+      },
+      "text": {
+        "primary":      { "light": "{primitive.slate.900}",    "dark": "{primitive.slate.50}" },
+        "secondary":    { "light": "{primitive.slate.600}",    "dark": "{primitive.slate.300}" },
+        "muted":        { "light": "{primitive.slate.400}",    "dark": "{primitive.slate.500}" },
+        "on-brand":     { "light": "#ffffff",                  "dark": "#ffffff" }
+      },
+      "brand": {
+        "primary":      { "light": "{primitive.blue.900}",     "dark": "{primitive.blue.500}" },
+        "action":       { "light": "{primitive.blue.600}",     "dark": "{primitive.blue.600}" },
+        "action-hover": { "light": "{primitive.blue.700}",     "dark": "{primitive.blue.700}" },
+        "accent":       { "light": "{primitive.blue.100}",     "dark": "{primitive.blue.950}" }
+      },
+      "feedback": {
+        "success":      { "light": "{primitive.emerald.600}",  "dark": "{primitive.emerald.500}" },
+        "warning":      { "light": "{primitive.amber.600}",    "dark": "{primitive.amber.500}" },
+        "destructive":  { "light": "{primitive.rose.600}",     "dark": "{primitive.rose.500}" }
+      },
+      "border": {
+        "default":      { "light": "{primitive.slate.200}",    "dark": "{primitive.slate.700}" },
+        "active":       { "light": "{primitive.blue.600}",     "dark": "{primitive.blue.500}" },
+        "error":        { "light": "{primitive.rose.500}",     "dark": "{primitive.rose.500}" }
+      }
+    }
+  }
+}</pre>
+    </div>
+
+    <h3>2.3 Typography Scale Engine</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Style Token Name</th>
+                <th>Font Size</th>
+                <th>Weight</th>
+                <th>Line Height</th>
+                <th>Letter Spacing</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>font/display-hero</code></td>
+                <td>36px</td>
+                <td>700</td>
+                <td>44px</td>
+                <td>-0.02em</td>
+            </tr>
+            <tr>
+                <td><code>font/section-title</code></td>
+                <td>24px</td>
+                <td>700</td>
+                <td>32px</td>
+                <td>-0.01em</td>
+            </tr>
+            <tr>
+                <td><code>font/subsection-header</code></td>
+                <td>18px</td>
+                <td>600</td>
+                <td>26px</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><code>font/body-bold</code></td>
+                <td>14px</td>
+                <td>600</td>
+                <td>20px</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><code>font/body-regular</code></td>
+                <td>14px</td>
+                <td>400</td>
+                <td>20px</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><code>font/label-medium</code></td>
+                <td>13px</td>
+                <td>500</td>
+                <td>18px</td>
+                <td>0.01em</td>
+            </tr>
+            <tr>
+                <td><code>font/caption-technical</code></td>
+                <td>12px</td>
+                <td>400</td>
+                <td>16px</td>
+                <td>0.02em</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SECTION 3 -->
+    <h2>3. Master Interaction Component Matrices</h2>
+
+    <h3>3.1 Component Variant Matrix: Primary Button</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>State Property</th>
+                <th>Background Fill Token</th>
+                <th>Outline</th>
+                <th>Internal Text Style / Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>State=Idle</code></td>
+                <td><code>semantic.color.brand.action</code></td>
+                <td>None</td>
+                <td><code>font/body-bold</code> (#ffffff)</td>
+            </tr>
+            <tr>
+                <td><code>State=Hover</code></td>
+                <td><code>semantic.color.brand.action-hover</code></td>
+                <td>None</td>
+                <td><code>font/body-bold</code> (#ffffff)</td>
+            </tr>
+            <tr>
+                <td><code>State=Focused</code></td>
+                <td><code>semantic.color.brand.action</code></td>
+                <td>2px solid <code>text.primary</code></td>
+                <td><code>font/body-bold</code> (#ffffff)</td>
+            </tr>
+            <tr>
+                <td><code>State=Disabled</code></td>
+                <td><code>background.surface-mute</code></td>
+                <td>None</td>
+                <td><code>font/body-bold</code> (<code>text.muted</code>)</td>
+            </tr>
+            <tr>
+                <td><code>State=Loading</code></td>
+                <td><code>semantic.color.brand.action</code></td>
+                <td>None</td>
+                <td>Hidden (SVG Spinner Enabled)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>3.2 Component Variant Matrix: Text Input Field</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>State Property</th>
+                <th>Content Box Fill</th>
+                <th>Border Outline Layer</th>
+                <th>Label Color Token</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>State=Normal</code></td>
+                <td><code>background.surface</code></td>
+                <td>1px solid <code>border.default</code></td>
+                <td><code>text.secondary</code></td>
+            </tr>
+            <tr>
+                <td><code>State=Active</code></td>
+                <td><code>background.surface</code></td>
+                <td>2px solid <code>border.active</code></td>
+                <td><code>text.primary</code></td>
+            </tr>
+            <tr>
+                <td><code>State=Error</code></td>
+                <td><code>background.surface</code></td>
+                <td>2px solid <code>border.error</code></td>
+                <td><code>feedback.destructive</code></td>
+            </tr>
+            <tr>
+                <td><code>State=Disabled</code></td>
+                <td><code>background.surface-mute</code></td>
+                <td>1px solid <code>border.default</code></td>
+                <td><code>text.muted</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SECTION 4 -->
+    <h2>4. Screen-by-Screen Specifications</h2>
+
+    <!-- SCR-01 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Public Portal Landing Page</span>
+            <span class="screen-id">SCR-01</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> High-conversion landing view structured to highlight core capabilities, toolsets, pricing comparisons, and registration gateways.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Logo] CareerForge Pro           [Features]   [Pricing]            [Button: Login]|
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|                   Optimize Your Resume For Algorithmic Filters                    |
+|             Build high-impact, tailored resumes that clear ATS checks.            |
+|                                                                                   |
+|             +-----------------------+     +---------------------------+           |
+|             | [Button: Start Free]  |     | [Button: Explore Pricing] |           |
+|             +-----------------------+     +---------------------------+           |
+|                                                                                   |
++-----------------------------------------------------------------------------------+
+| [Card 1: Real-time Scanning]  [Card 2: AI Bullet Rewrites]  [Card 3: PDF Compile] |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Parent container uses strict vertical stacking with spacing: 0px. Navigation element stretches horizontally with left/right margins at 80px. Features deploy across a centered, responsive 3-column horizontal structure.</p>
+    </div>
+
+    <!-- SCR-02 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">User Account Login Panel</span>
+            <span class="screen-id">SCR-02</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Centered isolation modal designed to capture account verification credentials and initialize user sessions securely.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+|                                                                                   |
+|                                   Welcome Back                                    |
+|                         Enter your credentials to log in                          |
+|                                                                                   |
+|          Email Address                                                            |
+|          +-------------------------------------------------------------+          |
+|          | user@domain.com                                             |          |
+|          +-------------------------------------------------------------+          |
+|                                                                                   |
+|          Password                                                                 |
+|          +-------------------------------------------------------------+          |
+|          | **********                                                  |          |
+|          +-------------------------------------------------------------+          |
+|                                                                                   |
+|          +-------------------------------------------------------------+          |
+|          | [Button: Authenticate Account]                              |          |
+|          +-------------------------------------------------------------+          |
+|                                                                                   |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Central form block card has width fixed to 420px with centered coordinates across horizontal and vertical viewpoints.</p>
+    </div>
+
+    <!-- SCR-03 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">User Account Registration Panel</span>
+            <span class="screen-id">SCR-03</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Dynamic profile builder form which provisions multi-tenant structures and database nodes for new active subscribers.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+|                                                                                   |
+|                                Create Your Account                                |
+|                                                                                   |
+|          Email Address                                                            |
+|          +-------------------------------------------------------------+          |
+|          |                                                             |          |
+|          +-------------------------------------------------------------+          |
+|                                                                                   |
+|          Choose Password                                                          |
+|          +-------------------------------------------------------------+          |
+|          |                                                             |          |
+|          +-------------------------------------------------------------+          |
+|                                                                                   |
+|          +-------------------------------------------------------------+          |
+|          | [Button: Initialize Profile]                                |          |
+|          +-------------------------------------------------------------+          |
+|                                                                                   |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Vertical layout alignment with item gap: 20px. Centered within global viewport guidelines.</p>
+    </div>
+
+    <!-- SCR-04 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">User Core Hub Dashboard</span>
+            <span class="screen-id">SCR-04</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Main user dashboard displaying document metrics tables, pricing/billing indicators, and new project actions.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Logo] CF Pro  | Welcome Back, Candidate                             [Profile Icon] |
++----------------+------------------------------------------------------------------+
+| [Dashboard]    | Your Resumes                                                     |
+| [Templates]    | +--------------------------------------------------------------+ |
+| [Subscription] | | Core Senior Dev Resume        [Score: 84%] [Edit] [Delete]  | |
+|                | +--------------------------------------------------------------+ |
+|                | +--------------------------------------------------------------+ |
+| [Admin Panel]  | | FinOps Architect Blueprint    [Score: 42%] [Edit] [Delete]  | |
+|                | +--------------------------------------------------------------+ |
++----------------+------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Uses split-pane grid mapping. Sidebar column is set to fixed width 260px. Work spaces resize fluidly with left margin at 40px.</p>
+    </div>
+
+    <!-- SCR-05 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Unified Multi-Pane Creation Workspace</span>
+            <span class="screen-id">SCR-05</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> High-density operational view combining form sections with real-time browser canvas updates.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Back] Document Builder Panel   [Score: 84%]                       [Button: Export] |
++---------------------------------------+-------------------------------------------+
+| [Form Inputs Section]                 | [Interactive Document Canvas]             |
+|                                       |                                           |
+|  First Name       Last Name           |                MARCUS VANCE               |
+|  +------------+   +------------+      |             Systems Architect             |
+|  | Marcus     |   | Vance      |      |                                           |
+|  +------------+   +------------+      | • Designed and deployed high-             |
+|                                       |   availability multi-region               |
+| +-----------------------------------+ |   AWS cloud clusters...                   |
+| | [Button: Trigger AI Optimize]     | |                                           |
+| +-----------------------------------+ |                                           |
++---------------------------------------+-------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Split screen horizontal layout. Symmetrical editing form width is fixed to 640px, while preview canvas elements adapt fluidly to fill outer frames.</p>
+    </div>
+
+    <!-- SCR-06 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Asynchronous Live Export Canvas Preview</span>
+            <span class="screen-id">SCR-06</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Full-screen verification frame centered on a simulated, printable, standard A4 layout module.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Close Preview]   Template Options: [Classic ▾]                    [Download PDF] |
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|                                  MARCUS VANCE                                     |
+|                               Systems Architect                                   |
+|                                                                                   |
+|    EXPERIENCE                                                                     |
+|    Lead Cloud Infrastructure Architect | Global Core Systems                      |
+|    • Engineered secure, highly-scalable multi-tenant infrastructure               |
+|      deployments matching rigorous production metrics...                          |
+|                                                                                   |
+|    EDUCATION                                                                      |
+|    B.S. Computer Engineering | Stanford Systems Institute                         |
+|                                                                                   |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Render dimensions strictly centered on both vertical and horizontal directions with fixed A4 dimensions (794px width x 1123px height).</p>
+    </div>
+
+    <!-- SCR-07 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Embedded Real-Time ATS Evaluation Engine</span>
+            <span class="screen-id">SCR-07</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Real-time matching parser evaluating input text against target job criteria to compute compatibility index scores.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Back] ATS Scanning Module Dashboard                                              |
++-------------------------------------------+---------------------------------------+
+| Paste Target Job Description              | Analysis Optimization Results         |
+| +---------------------------------------+ | +-----------------------------------+ |
+| | Looking for systems expert with deep  | | |        Match Score Metric         | |
+| | Kubernetes cluster skills and         | | |               68%                 | |
+| | background deploying AWS...           | | +-----------------------------------+ |
+| +---------------------------------------+ |                                       |
+|                                           | Identified Missing Keywords           |
+| +---------------------------------------+ | [Terraform ⊕]    [FinOps ⊕]           |
+| | [Button: Compute Match Metrics]       | |                                       |
+| +---------------------------------------+ | [Button: Optimize Copy]               |
++-------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Horizontal split with gap: 32px. Ingestion form adapts dynamically with growth metrics, while validation columns scale cleanly beside layout boundaries.</p>
+    </div>
+
+    <!-- SCR-08 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">AI Contextual Bullet Optimizer Panel</span>
+            <span class="screen-id">SCR-08</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Right-aligned flyout drawer designed to analyze phrasing selections and offer instant semantic optimizations.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| AI Bullet Optimizer Copilot                                                   [X] |
++-----------------------------------------------------------------------------------+
+| Selected Phrase Source Bullet:                                                    |
+| "Managed server setups and infrastructure things for the company."                |
++-----------------------------------------------------------------------------------+
+| Context Phrasing Recommendation Output Options:                                   |
+|                                                                                   |
+| [Option 1]                                                                        |
+| "Architected high-availability AWS cloud infrastructure and managed               |
+|  Kubernetes production clusters, boosting reliability metrics..."                 |
+| [Button: Apply Phrasing Choice]                                                   |
+|                                                                                   |
+| [Option 2]                                                                        |
+| "Deployed immutable Terraform compliance infrastructure modules..."               |
+| [Button: Apply Phrasing Choice]                                                   |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Fixed drawer container width set to 460px with strict absolute positioning pinned to the right viewpoint border.</p>
+    </div>
+
+    <!-- SCR-09 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Asynchronous Cover Letter Generator</span>
+            <span class="screen-id">SCR-09</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Dynamic cover letter builder evaluating system variables to assemble cohesive documents automatically.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| Tailored Cover Letter Builder Console                                             |
++-------------------------------------------+---------------------------------------+
+| Target Parameters Input Form              | Generated Letter Output               |
+|                                           |                                       |
+|  Target Organization Name                 | Dear Hiring Team,                     |
+|  +--------------------------------------+ |                                       |
+|  | Global Tech Solutions                | | I am writing to express my          |
+|  +--------------------------------------+ | enthusiastic interest in the          |
+|                                           | Systems Architect role...             |
+|  Target Job Role Position                 |                                       |
+|  +--------------------------------------+ |                                       |
+|  | Senior Systems Architect             | |                                       |
+|  +--------------------------------------+ |                                       |
++-------------------------------------------+---------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Balanced split pane. Left parameters width is fixed to 480px. Right preview frame expands dynamically using full flex layouts.</p>
+    </div>
+
+    <!-- SCR-10 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Onboarding Template Gallery</span>
+            <span class="screen-id">SCR-10</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Visual layout catalog allowing subscribers to browse, filter, and pick foundational canvas styles.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Logo] CF Pro                                                       [Profile Icon] |
++-----------------------------------------------------------------------------------+
+| Select A Foundation Layout Framework                                              |
+|                                                                                   |
+| +-------------------+     +-------------------+     +-------------------+         |
+| | [Thumbnail Mock]  |     | [Thumbnail Mock]  |     | [Thumbnail Mock]  |         |
+| |                   |     |                   |     |                   |         |
+| | Executive Modern  |     | Minimal Tech Spec |     | Ivy League Plain  |         |
+| | [Button: Choose]  |     | [Button: Choose]  |     | [Button: Choose]  |         |
+| +-------------------+     +-------------------+     +-------------------+         |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Uses responsive CSS grid with spacing: 24px and width: Fill Container.</p>
+    </div>
+
+    <!-- SCR-11 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Platform Tier Pricing Page</span>
+            <span class="screen-id">SCR-11</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Subscription model breakdown card panel displaying product features, billing options, and Stripe gateways.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+|                           Choose Your Acceleration Tier                           |
+|                                                                                   |
+|         [ Free Access Tier ]                     [ Premium Copilot ]              |
+|              $0 / mo                                 $19 / mo                     |
+|                                                                                   |
+|          • 1 Active Document Max                 • Unlimited Documents            |
+|          • Basic Layout Styles                   • ATS Vector Engine              |
+|          • Standard PDF Output                   • AI Phrasing Suite              |
+|                                                                                   |
+|         +--------------------+                  +--------------------+            |
+|         | [Button: Select]   |                  | [Button: Upgrade]  |            |
+|         +--------------------+                  +--------------------+            |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Symmetrical horizontal card layout using margin gaps of 32px. Prominent primary styling scales active tiers upward dynamically.</p>
+    </div>
+
+    <!-- SCR-12 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Operational Session Billing Portal</span>
+            <span class="screen-id">SCR-12</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Dynamic payment ledger portal designed to display active plans, invoicing logs, and receipt assets securely.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Logo] CF Pro                                                       [Profile Icon] |
++-----------------------------------------------------------------------------------+
+| Your Account Subscription Lifecycle                                               |
+|                                                                                   |
+| Current Active Plan: Premium Enterprise Copilot ($19/mo)                          |
+| Status Indicator Status: [ Active Status Badge ]       Next Renewal: 07/2026      |
+|                                                                                   |
+| +-----------------------------------+                                             |
+| | [Button: Cancel Plan Access]      |                                             |
+| +-----------------------------------+                                             |
+|                                                                                   |
+| Historical Transaction Invoices Ledger                                            |
+| 05/2026 ── Subscription Charge ── $19.00 ── [ View Invoice Receipt ]              |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Vertical layout alignment with item gap: 28px. Invoices table maps coordinates cleanly across the page width.</p>
+    </div>
+
+    <!-- SCR-13 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Stripe Checkout Success Intermediary</span>
+            <span class="screen-id">SCR-13</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Transaction validation landing dashboard displaying success confirmations and routing return links.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+|                                                                                   |
+|                            ✔ Subscription Confirmed!                              |
+|                 Thank you for unlocking CareerForge Pro Premium                   |
+|                                                                                   |
+|           Your transactional account permissions have been updated.               |
+|                                                                                   |
+|                      +------------------------------------+                       |
+|                      | [Button: Go To Dashboard Space]    |                       |
+|                      +------------------------------------+                       |
+|                                                                                   |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Centered card form structure with card width fixed to 520px.</p>
+    </div>
+
+    <!-- SCR-14 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Stripe Checkout Cancellation Intermediary</span>
+            <span class="screen-id">SCR-14</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Interruption handler page designed to navigate aborted Stripe workflows safely back to client selection dashboards.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+|                                                                                   |
+|                                Checkout Incomplete                                |
+|                       The payment process was not completed                       |
+|                                                                                   |
+|             No transaction changes or tier upgrades were completed.               |
+|                                                                                   |
+|                      +------------------------------------+                       |
+|                      | [Button: Retry Checkout Setup]     |                       |
+|                      +------------------------------------+                       |
+|                                                                                   |
++-----------------------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Card width fixed to 500px, horizontally and vertically centered.</p>
+    </div>
+
+    <!-- SCR-15 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">User Profile Console Configuration</span>
+            <span class="screen-id">SCR-15</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> User profile panel constructed to persist contact coordinates, credentials, and default configuration schemas.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| [Logo] CF Pro  | Profile Settings Management                                      |
++----------------+------------------------------------------------------------------+
+| [Dashboard]    | Identity Personal Context Data                                   |
+| [Templates]    |  Full Name                                                       |
+| [Subscription] | +--------------------------------------------------------------+ |
+|                | | Marcus Vance                                                 | |
+|                | +--------------------------------------------------------------+ |
+|                |  Contact Email                                                   |
+| [Admin Panel]  | +--------------------------------------------------------------+ |
+|                | | marcus.vance@cloud.io                                        | |
+|                | +--------------------------------------------------------------+ |
+|                | +--------------------------------------------------------------+ |
+|                | | [Button: Persist Configuration Mutations]                    | |
+|                | +--------------------------------------------------------------+ |
++----------------+------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Main input form fields are limited to fixed max-width: 540px to preserve visual scan lines.</p>
+    </div>
+
+    <!-- SCR-16 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Administrative Console Analytics Core</span>
+            <span class="screen-id">SCR-16</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Core administrative dashboard monitoring computational node performance indicators and financial transactions.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| ADMIN HUB  │ Platform Performance Metrics Overview                                |
++------------+----------------------------------------------------------------------+
+| [Analytics]│ Global Metric Telemetry Counters                                     |
+| [Tenants]  │ +------------------+  +------------------+  +------------------+     |
+| [Ledger]   │ | Active Subscriptions| | Compute Load Node| | Monthly Recurring|     |
+| [Assets]   │ |      4,821       |  |      24%       |  |     $91,420      |     |
+|            │ +------------------+  +------------------+  +------------------+     |
+|            │                                                                      |
+|            │ System Log Event Feeds Stream                                        |
+|            │ [09:21:04] ── User USR-9102 Generated Vector PDF Asset               |
+|            │ [09:20:55] ── Stripe Webhook Event Ingested Successfully             |
++------------+----------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Metric cards align horizontally with spacing: 20px. Telemetry logs panel spans the remaining width.</p>
+    </div>
+
+    <!-- SCR-17 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Administrative Tenant Directory Controller</span>
+            <span class="screen-id">SCR-17</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Operational control workspace structured to examine credentials, usage metrics, and subscriber bans.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| ADMIN HUB  │ Tenant Accounts Directory Control Panel                              |
++------------+----------------------------------------------------------------------+
+|            | Search Filter Accounts: [ Input Box Parameter Search ]               |
+|            |                                                                      |
+|            | User Identity Context   │ Tier Rank Status    │ Core Actions         |
+|            | ────────────────────────┼─────────────────────┼───────────────────── |
+|            | marcus@cloud.io         │ Premium Tier Code   │ [Edit] [Ban]         |
+|            | sarah.dev@gmail.com     │ Guest Basic Tier    │ [Edit] [Ban]         |
++------------+----------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Spacing: 24px with vertical layout boundaries. Grid cells are configured using proportional stretching variables.</p>
+    </div>
+
+    <!-- SCR-18 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Administrative Billing Ledger Audit Matrix</span>
+            <span class="screen-id">SCR-18</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> Auditing interface analyzing incoming transactions and database events to trace financial activity.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| ADMIN HUB  │ Stripe Webhook Accounts Billing Log Ledger                           |
++------------+----------------------------------------------------------------------+
+|            | Active Operational Metrics: Total Monthly MRR: $91,420               |
+|            |                                                                      |
+|            | Transaction ID  │ User Identifier  │ Total Paid   │ Action           |
+|            | ────────────────┼──────────────────┼──────────────┼───────────────── |
+|            | TXN-10928341    │ marcus@cloud.io  │ $19.00       │ [Replay]         |
+|            | TXN-10928340    │ sarah@gmail.com  │ $19.00       │ [Replay]         |
++------------+----------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Main layout margins: 40px with item gaps set to 32px.</p>
+    </div>
+
+    <!-- SCR-19 -->
+    <div class="screen-container">
+        <div class="screen-header">
+            <span class="screen-title">Administrative Template Configuration Center</span>
+            <span class="screen-id">SCR-19</span>
+        </div>
+        <p><strong>Functional Purpose:</strong> System asset workspace built to inspect template code, verify rendering engines, and publish updates.</p>
+        <div class="wireframe-container">+-----------------------------------------------------------------------------------+
+| ADMIN HUB  │ Template Configuration Management Studio                             |
++------------+----------------------------------------------------------------------+
+|            |  +----------------------------------------------------+              |
+|            |  | [Button: Upload New Layout Template Specification] |              |
+|            |  +----------------------------------------------------+              |
+|            |                                                                      |
+|            |   Active Layout Options Collection                                   |
+|            |   • Executive Blueprint Design Standard  ─── Status: [Active]        |
+|            |   • Plain Academic Layout Frame Standard ─── Status: [Active]        |
++------------+----------------------------------------------------------------------+</div>
+        <p><strong>Auto Layout Settings:</strong> Workspace uses vertical alignments. Ingestion zones adapt dynamically with responsive width configurations.</p>
+    </div>
+
+    <!-- SECTION 5 -->
+    <h2>5. Animation Physics &amp; Interaction Behavior</h2>
+    <p>
+        The style engine implements standard transition timing properties to prevent UI layout delays while offering elegant responses to interactive events.
+    </p>
+    <div class="code-container">
+        <div class="code-header">
+            <span>motion-specs.json</span>
+            <span>JSON</span>
+        </div>
+        <pre>{
+  "motion": {
+    "timing": {
+      "instant": "0ms",
+      "fast-micro": "150ms",
+      "standard-pane": "300ms",
+      "heavy-modal": "450ms"
+    },
+    "easing": {
+      "linear": "cubic-bezier(0, 0, 1, 1)",
+      "standard-smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "drawer-slide-in": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "bounce-feedback": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+    }
+  }
+}</pre>
+    </div>
+    <ul>
+        <li><strong>Interactive Hover Scaling:</strong> Actions scale horizontally using standard fast micro parameters (150ms cubic-bezier(0.4, 0, 0.2, 1)).</li>
+        <li><strong>Lateral Drawer Deployments:</strong> Side drawer panels (such as SCR-08) use a clean sliding gesture moving in from the right viewpoint borders (300ms cubic-bezier(0.16, 1, 0.3, 1)).</li>
+        <li><strong>Feedback Notification Dismissals:</strong> Alert modals fade using linear transparency parameters (150ms linear), shifting state weights from 1 down to 0.</li>
+    </ul>
+
+    <!-- SECTION 6 -->
+    <h2>6. Engineering Implementation Parity File Maps</h2>
+
+    <h3>6.1 Tailwind CSS Configuration Structure (tailwind.config.js)</h3>
+    <div class="code-container">
+        <div class="code-header">
+            <span>tailwind.config.js</span>
+            <span>JavaScript</span>
+        </div>
+        <pre>module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          primary: 'var(--color-brand-primary)',
+          action: 'var(--color-brand-action)',
+          actionHover: 'var(--color-brand-action-hover)'
+        },
+        neutral: {
+          canvas: 'var(--color-neutral-bg-canvas)',
+          surface: 'var(--color-neutral-bg-surface)',
+          textPrimary: 'var(--color-neutral-text-primary)'
+        },
+        feedback: {
+          success: 'var(--color-feedback-success)',
+          warning: 'var(--color-feedback-warning)',
+          destructive: 'var(--color-feedback-destructive)'
+        }
+      },
+      spacing: { xs: '4px', sm: '8px', md: '16px', lg: '24px', xl: '32px' },
+      borderRadius: { sm: '4px', md: '8px', lg: '12px' }
+    }
+  }
+}</pre>
+    </div>
+
+    <h3>6.2 Root Design System Token Variable Definitions (global.css)</h3>
+    <div class="code-container">
+        <div class="code-header">
+            <span>global.css</span>
+            <span>CSS</span>
+        </div>
+        <pre>:root {
+  --color-brand-primary: #1e3a8a;       /* primitive.blue.900 */
+  --color-brand-action: #2563eb;        /* primitive.blue.600 */
+  --color-brand-action-hover: #1d4ed8;  /* primitive.blue.700 */
+  
+  --color-neutral-bg-canvas: #f8fafc;   /* primitive.slate.50 */
+  --color-neutral-bg-surface: #ffffff;
+  --color-neutral-text-primary: #0f172a;/* primitive.slate.900 */
+  
+  --color-feedback-success: #059669;    /* primitive.emerald.600 */
+  --color-feedback-warning: #d97706;    /* primitive.amber.600 */
+  --color-feedback-destructive: #dc2626;/* primitive.rose.600 */
+}</pre>
+    </div>
+
+    <h3>6.3 Target Frontend Folder Structure Parity</h3>
+    <div class="tree-node">client/src/
+├── components/
+│   ├── ui/               		# Pure Atom Primitives (Linked to Component Variant Matrices)
+│   │   ├── button.jsx    		# Component/Button/Primary Implementation Code
+│   │   ├── input.jsx     		# Component/InputField Normal/Active Variants
+│   │   └── badge.jsx     		# Context metric feedback badges
+│   └── shared/           		# Application Organisms (Persistent interface frames)
+│       ├── Sidenav.jsx   		# Global Left App Sidenav Bar
+│       └── Header.jsx    		# Top View Title and Export Action headers
+├── pages/                		# High-Level Organism Groupings (Maps to Screen Inventories)
+│   ├── Landing/          		# Public Portal Landing Page View Component (SCR-01)
+│   ├── Dashboard/        		# User Core Hub Dashboard Interface (SCR-04)
+│   ├── Workspace/        		# Multi-Pane Split Layout Workspace Panel (SCR-05)
+│   └── Admin/            		# System Infrastructure Telemetry Canvas (SCR-16)
+├── store/                		# Synchronized Frontend State Orchestration Architecture
+│   ├── index.js          		# Global Central App Store initialization code
+│   ├── authSlice.js      		# Login/Registration validation transitions
+│   └── resumeSlice.js    		# Dynamic document input field state tree updates
+└── styles/
+    └── global.css        		# Root Design System Token Variable Definitions</div>
+
+    <!-- SECTION 7 -->
+    <h2>7. Sign-Off &amp; Deployment Checklist</h2>
+    <p>Verify that each system requirement below has cleared our development audits before deploying new layout updates:</p>
+    
+    <div class="checklist-item">
+        <div class="checklist-checkbox"></div>
+        <div><strong>Initialize Global Tokens:</strong> Verify primitive design tokens correspond cleanly with Figma parameters across Light/Dark modes.</div>
+    </div>
+    <div class="checklist-item">
+        <div class="checklist-checkbox"></div>
+        <div><strong>Build Out Master Matrices:</strong> Confirm variant parameters behave correctly during Hover, Focused, and Loading states.</div>
+    </div>
+    <div class="checklist-item">
+        <div class="checklist-checkbox"></div>
+        <div><strong>Deploy Target Viewports:</strong> Verify page layouts reflow perfectly across our standard desktop, tablet, and mobile coordinates.</div>
+    </div>
+    <div class="checklist-item">
+        <div class="checklist-checkbox"></div>
+        <div><strong>Audit Layout Constraints:</strong> Confirm spacing parameters scale seamlessly without causing alignment issues inside high-density panels.</div>
+    </div>
+    <div class="checklist-item">
+        <div class="checklist-checkbox"></div>
+        <div><strong>Execute Design Accessibility Audits:</strong> Verify foreground content color contrast ratios satisfy WCAG 2.1 AA benchmarks.</div>
+    </div>
+
+</div>
+
+</body>
+</html>
